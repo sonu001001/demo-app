@@ -1,9 +1,7 @@
-// Define variable
-containerName = "mydemoapp"
-
 pipeline {
     agent any
     environment {
+    containerName = "mydemoapp"
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
     stages {
