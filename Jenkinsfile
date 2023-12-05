@@ -23,7 +23,7 @@ pipeline {
      post {
     always {
       sh 'docker logout'
-      mail bcc: '', body: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', cc: '', from: '', replyTo: '', subject: 'jenkins', to: 'email2sonuy@gmail.com'
+      emailext body: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', subject: 'test', to: 'email2sonuy@gmail.com'
       }
    }
 }
