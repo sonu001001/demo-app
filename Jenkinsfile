@@ -1,5 +1,5 @@
 // Define variable
-def containerName = mydemoapp
+containerName = "mydemoapp"
 
 pipeline {
     agent any
