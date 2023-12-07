@@ -1,0 +1,9 @@
+services:
+  app1:
+    image: thisissonu3618/mydemoapp:12
+    ports:
+      - 127.0.0.1:3000:3000
+  app2:
+    image: thisissonu3618/mydemoapp:3
+    ports:
+      - 127.0.0.1:3001:3000
