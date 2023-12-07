@@ -16,8 +16,7 @@ pipeline {
     stage('Deploy') {
             steps {
                 sh 'docker-compose down'
-                sh 'yq e -i '.services.app2.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml'
-                sh 'yq e -i '.services.app1.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml'
+                sh 'sed  's\mydemoapp:version\mydemoapp:$BUILD_NUMBER\g' docker-compose.yaml'
                 sh 'docker-compose up -d'
             }
         }    
