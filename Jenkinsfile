@@ -15,7 +15,9 @@ pipeline {
         }
     stage('Deploy') {
             steps {
-                sh 'docker stop $containerName || true && docker rm -f $containerName || true'
+                sh 'docker-compose down'
+                sh yq e -i '.services.app2.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml
+                sh yq e -i '.services.app1.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml
                 sh 'docker run -itd -p 3000:3000 --name $containerName thisissonu3618/mydemoapp:$BUILD_NUMBER'
             }
         }    
