@@ -15,9 +15,10 @@ pipeline {
         }
     stage('Deploy') {
             steps {
-                sh 'docker-compose down'
-                sh "sed -i 's\mydemoapp:version\mydemoapp:$BUILD_NUMBER\g' docker-compose.yaml"
-                sh 'docker-compose up -d'
+                sh 'yq'
+               // sh 'docker-compose down'
+                //sh "sed -i 's\mydemoapp:version\mydemoapp:$BUILD_NUMBER\g' docker-compose.yaml"
+                //sh 'docker-compose up -d'
             }
         }    
     }
