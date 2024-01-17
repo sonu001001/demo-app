@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 
 app.get('/api/v1/test', (request, response, next) => {
-    response.send({ success: test11 });
+    response.send({ success: test12 });
 });
 
 server.listen(PORT, () => {
