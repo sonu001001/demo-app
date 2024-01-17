@@ -1,32 +1,29 @@
 pipeline {
     agent any
-    environment {
-    containerName = "mydemoapp"
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-    }
     stages {
         
-    stage('Build and Push') {
+    stage('Build') {
             steps {
-                sh 'docker build -t thisissonu3618/mydemoapp:$BUILD_NUMBER .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker push thisissonu3618/mydemoapp:$BUILD_NUMBER'
+                sh 'npm install --production'
+                sh 'tar -cvf netcomlearing.tar ./*'
+                sshagent(['netcomlearing']) {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@52.66.199.167 "rm -rf /home/ubuntu/netcomlearing/* "'
+                    sh 'scp -o StrictHostKeyChecking=no  ./netcomlearing.tar ubuntu@52.66.199.167:/home/ubuntu/netcomlearing '
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@52.66.199.167 "tar -xvf ./netcomlearing/netcomlearing.tar"'
+}
+                    
             }
         }
+
     stage('Deploy') {
             steps {
-				sh """
-					yq e -i '.services.app2.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml
-					yq e -i '.services.app1.image = "thisissonu3618/mydemoapp:$BUILD_NUMBER"' docker-compose.yaml
-					docker-compose up -d
-				"""
+            
+                sshagent(['netcomlearing']) {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@52.66.199.167 "pm2 reload all"  '
+}
+                    
             }
-        }    
-    }
-     post {
-    always {
-      sh 'docker logout'
-      emailext body: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', subject: 'test', to: 'email2sonuy@gmail.com'
-      }
-   }
+        }
+    
+}
 }
