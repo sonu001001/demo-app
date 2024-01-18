@@ -5,6 +5,7 @@ pipeline {
     stage('Build') {
             steps {
                 sh 'npm install --production'
+                sh 'npx eslint server.js'
                 sh 'tar -cvf netcomlearing.tar ./*'
                 sshagent(['netcomlearing']) {
                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@52.66.199.167 "rm -rf /home/ubuntu/netcomlearing/* "'
